@@ -119,6 +119,60 @@
     </div>
 </div>
 
+<!-- Gợi ý Sản phẩm -->
+<?php if (!empty($relatedProducts)): ?>
+<div class="section-header" style="margin-top:3rem;">
+    <h2>🦐 Có thể bạn sẽ thích xem thêm</h2>
+</div>
+<div class="product-grid" style="margin-bottom:3rem;">
+    <?php 
+    $count = 0;
+    foreach ($relatedProducts as $rel):
+        // Bỏ qua nếu đã có trong giỏ hàng
+        if (isset($cart[$rel['id']])) continue;
+        if (++$count > 4) break;
+    ?>
+    <div class="product-card">
+        <div class="product-image">
+            <img src="/banhaisan/public/images/<?php echo htmlspecialchars($rel['image']); ?>"
+                 alt="<?php echo htmlspecialchars($rel['name']); ?>"
+                 onerror="this.src='https://placehold.co/300x300/e0f4f4/0a7075?text=🦐'"
+                 style="height:180px;object-fit:cover;">
+            <div class="product-overlay">
+                <a href="/banhaisan/product/detail/<?php echo $rel['id']; ?>" class="btn-quick-view">👁 Xem chi tiết</a>
+            </div>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title"><?php echo htmlspecialchars($rel['name']); ?></h3>
+            <div class="product-price-row">
+                <span class="product-price"><?php echo number_format($rel['price'], 0, ',', '.'); ?>đ</span>
+                <span class="product-unit">/ kg</span>
+            </div>
+            <button onclick="addToCartAjax(<?php echo $rel['id']; ?>)" class="btn-cart" style="margin-top:0.5rem;width:100%;">
+                🛒 Mua thêm
+            </button>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
+
+<!-- Modal Added Success Custom (Cart only) -->
+<script>
+function addToCartAjax(id) {
+    fetch('/banhaisan/cart/add/' + id + '?qty=1', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            window.location.reload();
+        }
+    })
+    .catch(e => console.error(e));
+}
+</script>
+<?php endif; ?>
+
 <script>
 function updateQty(id, delta) {
     const input = document.getElementById('qty-' + id);

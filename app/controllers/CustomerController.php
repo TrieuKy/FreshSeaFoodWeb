@@ -33,6 +33,49 @@ class CustomerController {
         include 'app/views/customer/order_detail.php';
     }
 
+    // Hiển thị form chỉnh sửa hồ sơ
+    public function edit_profile() {
+        $this->requireLogin();
+        require_once 'app/models/UserModel.php';
+        $userModel = new UserModel();
+        $user = $userModel->getById($_SESSION['user_id']);
+        include 'app/views/customer/edit_profile.php';
+    }
+
+    // Xử lý cập nhật hồ sơ
+    public function update_profile() {
+        $this->requireLogin();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /banhaisan/customer/edit_profile');
+            exit;
+        }
+
+        require_once 'app/models/UserModel.php';
+        $userModel = new UserModel();
+        $id = $_SESSION['user_id'];
+        
+        $fullname = trim($_POST['fullname'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $address = trim($_POST['address'] ?? '');
+        $gender = $_POST['gender'] ?? null;
+        
+        $avatar = null;
+        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
+            $target_dir = 'public/images/avatars/';
+            if (!is_dir($target_dir)) mkdir($target_dir, 0777, true);
+            $avatar = time() . '_' . basename($_FILES['avatar']['name']);
+            move_uploaded_file($_FILES['avatar']['tmp_name'], $target_dir . $avatar);
+        }
+
+        if ($userModel->updateProfile($id, $fullname, $phone, $address, $gender, $avatar)) {
+            $_SESSION['fullname'] = $fullname;
+            if ($avatar) $_SESSION['avatar'] = $avatar;
+            echo "<script>alert('Cập nhật hồ sơ thành công!'); window.location.href='/banhaisan/customer/profile';</script>";
+        } else {
+            echo "<script>alert('Có lỗi xảy ra, vui lòng thử lại.'); window.history.back();</script>";
+        }
+    }
+
     // Kiểm tra voucher (AJAX)
     public function check_voucher() {
         header('Content-Type: application/json');
@@ -81,6 +124,35 @@ class CustomerController {
             'discount_value' => $voucher['discount_value'],
             'voucher_id'     => $voucher['id'],
         ]);
+    }
+
+    // Gửi đánh giá
+    public function submit_review() {
+        $this->requireLogin();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /banhaisan');
+            exit;
+        }
+
+        $product_id = intval($_POST['product_id'] ?? 0);
+        $order_id   = intval($_POST['order_id'] ?? 0);
+        $rating     = intval($_POST['rating'] ?? 5);
+        $comment    = trim($_POST['comment'] ?? '');
+        $user_id    = $_SESSION['user_id'];
+
+        if ($product_id && $order_id && $rating >= 1 && $rating <= 5) {
+            require_once 'app/models/ProductModel.php';
+            // Verify if still eligible
+            $eligibleOrderId = ProductModel::canUserReview($user_id, $product_id);
+            if ($eligibleOrderId && $eligibleOrderId == $order_id) {
+                if (ProductModel::addReview($user_id, $product_id, $order_id, $rating, $comment)) {
+                    echo "<script>alert('Cảm ơn bạn đã đánh giá!'); window.location.href='/banhaisan/product/detail/$product_id';</script>";
+                    exit;
+                }
+            }
+        }
+        
+        echo "<script>alert('Có lỗi xảy ra, không thể gửi đánh giá.'); window.history.back();</script>";
     }
 }
 ?>

@@ -40,5 +40,24 @@ class UserModel {
         }
         return false;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM users WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateProfile($id, $fullname, $phone, $address, $gender, $avatar = null) {
+        if ($avatar) {
+            $query = "UPDATE users SET fullname = ?, phone = ?, address = ?, gender = ?, avatar = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([$fullname, $phone, $address, $gender, $avatar, $id]);
+        } else {
+            $query = "UPDATE users SET fullname = ?, phone = ?, address = ?, gender = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([$fullname, $phone, $address, $gender, $id]);
+        }
+    }
 }
 ?>

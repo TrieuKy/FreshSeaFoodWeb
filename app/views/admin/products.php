@@ -96,6 +96,9 @@
                                  color:<?php echo ($p['stock'] ?? 0) > 0 ? '#0f6b35' : '#9b1c1c'; ?>;">
                         <?php echo ($p['stock'] ?? 0) > 0 ? ($p['stock'].' '.$p['unit']) : 'Hết hàng'; ?>
                     </span>
+                    <?php if (($p['stock'] ?? 0) > 0 && ($p['stock'] ?? 0) < 5): ?>
+                        <div style="font-size:0.75rem;color:var(--danger);font-weight:700;margin-top:0.3rem;">⚠️ Sắp hết (cần nhập thêm)</div>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <div style="display:flex;gap:0.4rem;">

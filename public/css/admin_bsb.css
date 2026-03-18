@@ -1,0 +1,314 @@
+/* AdminBSB Material Design CSS Clone */
+body {
+    font-family: 'Roboto', Arial, Tahoma, sans-serif;
+    background-color: #e9e9e9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #F44336;
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.navbar .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: normal;
+    text-decoration: none;
+    line-height: 70px;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.navbar-nav li a {
+    color: #fff;
+    padding: 0 15px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-decoration: none;
+}
+.navbar-nav li a:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.label-count {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    font-size: 10px;
+    line-height: 15px;
+    background-color: #333;
+    padding: 0 4px;
+    border-radius: 2px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    background: #fff;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info {
+    padding: 20px 15px;
+    background: url('/banhaisan/public/images/user-img-background.jpg') no-repeat no-repeat center center;
+    background-size: cover;
+    background-color: #b71c1c; /* Fallback for red material background block */
+    position: relative;
+    height: 135px;
+}
+
+.user-info .image img {
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.info-container {
+    color: #fff;
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+    right: 15px;
+}
+
+.info-container .name {
+    font-weight: bold;
+    font-size: 14px;
+}
+.info-container .email {
+    font-size: 12px;
+}
+.user-helper-dropdown {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+}
+.main-navigation-title {
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.menu .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu .list li {
+    border-bottom: 1px solid #eee;
+}
+
+.menu .list li.active {
+    background-color: rgba(0,0,0,0.03);
+}
+
+.menu .list li a {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-weight: normal;
+    transition: all 0.3s;
+}
+
+.menu .list li a:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.menu .list li a i.material-icons {
+    margin-right: 15px;
+    color: #777;
+    font-size: 20px;
+}
+
+.legal {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #555;
+}
+.legal .copyright a {
+    color: #F44336;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Content */
+.content {
+    margin-left: 300px;
+    margin-top: 70px;
+    padding: 20px;
+    min-height: calc(100vh - 70px);
+}
+
+.block-header {
+    margin-bottom: 20px;
+}
+.block-header h2 {
+    margin: 0;
+    color: #777;
+    font-weight: normal;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+/* Widget Info Box */
+.info-box {
+    display: flex;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    height: 80px;
+    display: flex;
+    cursor: default;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.info-box .icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-box .icon i {
+    color: #fff;
+    font-size: 40px;
+    line-height: 80px;
+}
+
+.info-box .content {
+    flex: 1;
+    padding: 10px 15px;
+    margin: 0;
+    min-height: auto;
+}
+
+.info-box .text {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #fff;
+    text-transform: uppercase;
+}
+.info-box .number {
+    font-size: 28px;
+    color: #fff;
+    margin-top: 0;
+}
+
+.bg-pink { background-color: #E91E63; }
+.bg-cyan { background-color: #00BCD4; }
+.bg-light-green { background-color: #8BC34A; }
+.bg-orange { background-color: #FF9800; }
+.bg-teal { background-color: #009688; }
+.bg-red { background-color: #F44336; }
+
+/* Grid System */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+.col {
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.col-3 { width: 25%; }
+.col-4 { width: 33.3333%; }
+.col-6 { width: 50%; }
+.col-12 { width: 100%; }
+
+/* Card */
+.card {
+    background: #fff;
+    min-height: 50px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    position: relative;
+    margin-bottom: 30px;
+    border-radius: 2px;
+}
+
+.card .header {
+    color: #555;
+    padding: 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(204,204,204,0.35);
+}
+.card .header h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+}
+
+.card .body {
+    font-size: 13px;
+    color: #555;
+    padding: 20px;
+}
+
+/* Base Form overide for Admin */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.admin-table th, .admin-table td {
+    padding: 10px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+.admin-table th { background: #f9f9f9; }
+
+/* Status Blocks for Admin Dashboard Cards */
+.status-list { list-style: none; padding: 0; margin: 0; }
+.status-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: space-between;
+}
+.status-list li:last-child { border: none; }
+.status-list li a { color: #fff; text-decoration: none; }

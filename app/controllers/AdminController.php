@@ -132,6 +132,15 @@ class AdminController {
         }
     }
 
+    // 7d. In hóa đơn
+    public function print_invoice() {
+        require_once 'app/models/OrderModel.php';
+        $id    = intval($_GET['id'] ?? 0);
+        $order = $id ? OrderModel::getById($id) : null;
+        if (!$order) { header('Location: /banhaisan/admin/orders'); exit; }
+        include 'app/views/admin/invoice.php';
+    }
+
     // 8. Danh sach voucher
     public function vouchers() {
         $db       = new Database();

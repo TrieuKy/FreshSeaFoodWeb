@@ -38,7 +38,7 @@ class ProductModel {
     }
 
     // Tìm kiếm và lọc sản phẩm
-    public static function search($keyword = '', $category = '', $minPrice = '', $maxPrice = '') {
+    public static function search($keyword = '', $category = '', $minPrice = '', $maxPrice = '', $sort = '') {
         $database = new Database();
         $conn = $database->getConnection();
 
@@ -71,7 +71,13 @@ class ProductModel {
             $params[] = $maxPrice;
         }
 
-        $query .= " ORDER BY p.id DESC";
+        if ($sort === 'price_asc') {
+            $query .= " ORDER BY p.price ASC";
+        } elseif ($sort === 'price_desc') {
+            $query .= " ORDER BY p.price DESC";
+        } else {
+            $query .= " ORDER BY p.id DESC";
+        }
 
         $stmt = $conn->prepare($query);
         $stmt->execute($params);
@@ -104,6 +110,46 @@ class ProductModel {
         $query = "DELETE FROM products WHERE id=?";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([$id]);
+    }
+
+    // REVIEW METHODS
+    public static function getReviews($product_id) {
+        $database = new Database();
+        $conn = $database->getConnection();
+        $query = "SELECT r.*, u.fullname, u.avatar 
+                  FROM reviews r 
+                  JOIN users u ON r.user_id = u.id 
+                  WHERE r.product_id = ? 
+                  ORDER BY r.created_at DESC";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$product_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function addReview($user_id, $product_id, $order_id, $rating, $comment) {
+        $database = new Database();
+        $conn = $database->getConnection();
+        $query = "INSERT INTO reviews (user_id, product_id, order_id, rating, comment) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        return $stmt->execute([$user_id, $product_id, $order_id, $rating, $comment]);
+    }
+
+    public static function canUserReview($user_id, $product_id) {
+        $database = new Database();
+        $conn = $database->getConnection();
+        // Kiểm tra xem user có đơn hàng 'delivered' chứa product này chưa, và chưa review cho order_id này
+        $query = "SELECT oi.order_id 
+                  FROM order_items oi
+                  JOIN orders o ON oi.order_id = o.id
+                  WHERE o.user_id = ? AND o.status = 'delivered' AND oi.product_id = ?
+                  AND NOT EXISTS (
+                      SELECT 1 FROM reviews r WHERE r.order_id = o.id AND r.product_id = ?
+                  )
+                  LIMIT 1";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$user_id, $product_id, $product_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['order_id'] : false;
     }
 }
 ?>

@@ -6,9 +6,10 @@ class ProductController {
         $category = $_GET['category'] ?? '';
         $minPrice = $_GET['min_price'] ?? '';
         $maxPrice = $_GET['max_price'] ?? '';
+        $sort     = $_GET['sort'] ?? '';
 
-        if ($keyword || $category || $minPrice || $maxPrice) {
-            $products = ProductModel::search($keyword, $category, $minPrice, $maxPrice);
+        if ($keyword || $category || $minPrice || $maxPrice || $sort) {
+            $products = ProductModel::search($keyword, $category, $minPrice, $maxPrice, $sort);
         } else {
             $products = ProductModel::getAll();
         }
@@ -32,6 +33,17 @@ class ProductController {
         if (!$product) {
             header('Location: /banhaisan');
             return;
+        }
+
+        $reviews = ProductModel::getReviews($id);
+        
+        $canReview = false;
+        $orderIdToReview = null;
+        if (isset($_SESSION['user_id'])) {
+            $orderIdToReview = ProductModel::canUserReview($_SESSION['user_id'], $id);
+            if ($orderIdToReview) {
+                $canReview = true;
+            }
         }
 
         include 'app/views/product/detail.php';

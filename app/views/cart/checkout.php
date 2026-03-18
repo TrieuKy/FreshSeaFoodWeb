@@ -28,6 +28,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label" for="delivery_time">Khung giờ giao hàng dự kiến</label>
+                    <select id="delivery_time" name="delivery_time" class="form-control">
+                        <option value="Càng sớm càng tốt">Càng sớm càng tốt</option>
+                        <option value="08:00 - 10:00">08:00 - 10:00</option>
+                        <option value="10:00 - 12:00">10:00 - 12:00</option>
+                        <option value="14:00 - 16:00">14:00 - 16:00</option>
+                        <option value="16:00 - 18:00">16:00 - 18:00</option>
+                        <option value="Giao trực tiếp cửa hàng">Trực tiếp chọn tại cửa hàng</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" for="note">Ghi chú đơn hàng <span style="color:var(--text-light);font-weight:400;">(không bắt buộc)</span></label>
                     <textarea id="note" name="note" class="form-control"
                               placeholder="Giờ giao hàng, hướng dẫn tìm nhà, yêu cầu đặc biệt..." rows="2"></textarea>

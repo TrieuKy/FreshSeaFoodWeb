@@ -18,6 +18,8 @@ class AuthController {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['fullname'] = $user['fullname'];
+            $_SESSION['avatar'] = $user['avatar'] ?? null;
             header('Location: /banhaisan');
         } else {
             echo "<script>alert('Sai tài khoản hoặc mật khẩu!'); window.history.back();</script>";
@@ -39,6 +41,8 @@ class AuthController {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['fullname'] = $user['fullname'];
+            $_SESSION['avatar'] = $user['avatar'] ?? null;
             
             if ($user['role'] == 'admin') {
                 header('Location: /banhaisan/admin/products');

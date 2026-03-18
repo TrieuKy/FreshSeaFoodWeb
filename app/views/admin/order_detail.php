@@ -18,10 +18,13 @@ $s = $statusMap[$order['status']] ?? $statusMap['pending'];
             Đơn hàng #<?php echo str_pad($order['id'], 5, '0', STR_PAD_LEFT); ?>
         </h1>
     </div>
-    <span style="padding:0.4rem 1.2rem;border-radius:50px;font-size:0.9rem;font-weight:700;
-                 background:<?php echo $s['color']; ?>;color:<?php echo $s['text']; ?>;">
-        <?php echo $s['label']; ?>
-    </span>
+    <div style="display:flex;gap:0.75rem;align-items:center;">
+        <a href="/banhaisan/admin/print_invoice?id=<?php echo $order['id']; ?>" target="_blank" class="btn btn-outline">🖨 In Hóa Đơn</a>
+        <span style="padding:0.4rem 1.2rem;border-radius:50px;font-size:0.9rem;font-weight:700;
+                     background:<?php echo $s['color']; ?>;color:<?php echo $s['text']; ?>;">
+            <?php echo $s['label']; ?>
+        </span>
+    </div>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;">
@@ -94,7 +97,8 @@ $s = $statusMap[$order['status']] ?? $statusMap['pending'];
             <p style="margin-bottom:0.4rem;font-size:0.88rem;"><strong>Tên:</strong> <?php echo htmlspecialchars($order['customer_name']); ?></p>
             <p style="margin-bottom:0.4rem;font-size:0.88rem;"><strong>SĐT:</strong> <a href="tel:<?php echo $order['customer_phone']; ?>" style="color:var(--primary);"><?php echo htmlspecialchars($order['customer_phone']); ?></a></p>
             <p style="margin-bottom:0.4rem;font-size:0.88rem;"><strong>Địa chỉ:</strong> <?php echo htmlspecialchars($order['customer_address']); ?></p>
-            <p style="font-size:0.88rem;"><strong>Thanh toán:</strong> <?php echo $order['payment_method'] === 'qr' ? '📱 QR Code' : '💵 COD'; ?></p>
+            <p style="margin-bottom:0.4rem;font-size:0.88rem;"><strong>Thanh toán:</strong> <?php echo $order['payment_method'] === 'qr' ? '📱 QR Code' : '💵 COD'; ?></p>
+            <p style="font-size:0.88rem;color:var(--primary);"><strong>⏰ Giao lúc:</strong> <?php echo htmlspecialchars($order['delivery_time'] ?? 'Càng sớm càng tốt'); ?></p>
         </div>
 
         <!-- Cập nhật trạng thái -->

@@ -13,16 +13,16 @@ class OrderModel {
      * Tạo đơn hàng mới, ghi order + order_items vào DB.
      * Trả về order_id nếu thành công, false nếu thất bại.
      */
-    public function createOrder($userId, $totalPrice, $shippingFee, $cart, $name, $phone, $address, $payment, $discountAmount = 0, $note = '') {
+    public function createOrder($userId, $totalPrice, $shippingFee, $cart, $name, $phone, $address, $payment, $discountAmount = 0, $note = '', $deliveryTime = '') {
         try {
             $this->conn->beginTransaction();
 
             // 1. Ghi vào bảng orders
             $stmt = $this->conn->prepare(
-                "INSERT INTO orders (user_id, total_price, shipping_fee, discount_amount, customer_name, customer_phone, customer_address, payment_method, note)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO orders (user_id, total_price, shipping_fee, discount_amount, customer_name, customer_phone, customer_address, payment_method, note, delivery_time)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
-            $stmt->execute([$userId, $totalPrice, $shippingFee, $discountAmount, $name, $phone, $address, $payment, $note]);
+            $stmt->execute([$userId, $totalPrice, $shippingFee, $discountAmount, $name, $phone, $address, $payment, $note, $deliveryTime]);
             $orderId = $this->conn->lastInsertId();
 
             // 2. Ghi từng sản phẩm vào order_items

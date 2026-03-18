@@ -42,7 +42,7 @@
 <div id="products">
     <div class="section-header">
         <h2>🦀 Hải Sản Ngày Hôm Nay</h2>
-        <?php if(isset($_GET['q']) || isset($_GET['category']) || isset($_GET['min_price'])): ?>
+        <?php if(!empty($_GET['q']) || !empty($_GET['category']) || !empty($_GET['min_price']) || !empty($_GET['max_price']) || !empty($_GET['sort'])): ?>
             <a href="/banhaisan/product/index">✕ Xóa bộ lọc</a>
         <?php endif; ?>
     </div>
@@ -65,7 +65,17 @@
                     <input type="number" name="min_price" placeholder="Giá từ" value="<?php echo htmlspecialchars($_GET['min_price'] ?? ''); ?>">
                     <span style="color:var(--text-light);font-size:0.85rem;">—</span>
                     <input type="number" name="max_price" placeholder="Đến giá" value="<?php echo htmlspecialchars($_GET['max_price'] ?? ''); ?>">
+                    
+                    <select name="sort" style="padding:0.4rem;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;outline:none;background:white;">
+                        <option value="">Sắp xếp: Mới nhất</option>
+                        <option value="price_asc" <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'price_asc') ? 'selected' : ''; ?>>Giá: Thấp đến Cao</option>
+                        <option value="price_desc" <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'price_desc') ? 'selected' : ''; ?>>Giá: Cao đến Thấp</option>
+                    </select>
+
                     <input type="hidden" name="q" value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
+                    <?php if (isset($_GET['category'])): ?>
+                        <input type="hidden" name="category" value="<?php echo htmlspecialchars($_GET['category']); ?>">
+                    <?php endif; ?>
                     <button type="submit" class="btn btn-sm">Lọc</button>
                 </div>
             </div>

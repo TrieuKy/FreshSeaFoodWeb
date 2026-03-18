@@ -15,6 +15,9 @@ class CartController {
         foreach ($cart as $item) {
             $totalPrice += $item['price'] * $item['quantity'];
         }
+        
+        $relatedProducts = ProductModel::getAll();
+
         include 'app/views/cart/index.php';
     }
 
@@ -40,8 +43,18 @@ class CartController {
 
         if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 
+        $currentQty = $_SESSION['cart'][$id]['quantity'] ?? 0;
+        $newQty = $currentQty + $qty;
+
+        if ($product['stock'] < $newQty) {
+            $msg = 'Sản phẩm chỉ còn ' . $product['stock'] . ' ' . ($product['unit'] ?? 'kg');
+            if ($isAjax) { echo json_encode(['success'=>false,'message'=>$msg]); return; }
+            echo "<script>alert('$msg'); window.history.back();</script>";
+            return;
+        }
+
         if (isset($_SESSION['cart'][$id])) {
-            $_SESSION['cart'][$id]['quantity'] += $qty;
+            $_SESSION['cart'][$id]['quantity'] = $newQty;
         } else {
             $_SESSION['cart'][$id] = [
                 'id'       => $product['id'],
@@ -104,6 +117,11 @@ class CartController {
             return;
         }
 
+        if (isset($_SESSION['role']) && $_SESSION['role'] !== 'customer') {
+            echo "<script>alert('Tài khoản quản trị viên/nhân viên không thể đặt hàng!'); window.history.back();</script>";
+            return;
+        }
+
         $cart = $_SESSION['cart'] ?? [];
         if (empty($cart)) {
             echo "<script>alert('Giỏ hàng trống!'); window.location.href='/banhaisan/cart/index';</script>";
@@ -131,6 +149,11 @@ class CartController {
             return;
         }
 
+        if (isset($_SESSION['role']) && $_SESSION['role'] !== 'customer') {
+            echo "<script>alert('Tài khoản quản trị viên/nhân viên không thể đặt hàng!'); window.history.back();</script>";
+            return;
+        }
+
         $cart = $_SESSION['cart'] ?? [];
         if (empty($cart)) {
             echo "<script>alert('Giỏ hàng trống!'); window.location.href='/banhaisan/cart/index';</script>";
@@ -142,6 +165,7 @@ class CartController {
         $address        = trim($_POST['address'] ?? '');
         $payment_method = $_POST['payment_method'] ?? 'cod';
         $note           = trim($_POST['note'] ?? '');
+        $delivery_time  = $_POST['delivery_time'] ?? 'Càng sớm càng tốt';
 
         if (empty($fullname) || empty($phone) || empty($address)) {
             echo "<script>alert('Vui lòng điền đầy đủ thông tin!'); window.history.back();</script>";
@@ -161,7 +185,7 @@ class CartController {
         $orderModel = new OrderModel();
         $orderId = $orderModel->createOrder(
             $userId, $totalPrice, $shipping, $cart,
-            $fullname, $phone, $address, $payment_method, 0, $note
+            $fullname, $phone, $address, $payment_method, 0, $note, $delivery_time
         );
 
         if ($orderId) {
