@@ -197,7 +197,9 @@ class CartController {
                 'items'   => $cart,
             ];
             unset($_SESSION['cart']);
-            header('Location: /banhaisan/cart/order_success');
+            
+            // All orders must pay via QR (either 50% deposit or 100% full)
+            header('Location: /banhaisan/cart/payment?id=' . $orderId);
         } else {
             echo "<script>alert('Lỗi đặt hàng! Vui lòng thử lại.'); window.history.back();</script>";
         }
@@ -206,6 +208,55 @@ class CartController {
     public function order_success() {
         $order = $_SESSION['last_order'] ?? null;
         include 'app/views/cart/order_success.php';
+    }
+
+    public function payment() {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: /banhaisan/cart/order_success');
+            return;
+        }
+        $order = OrderModel::getById($id);
+        if (!$order) {
+            header('Location: /banhaisan/');
+            return;
+        }
+        if ($order['status'] !== 'pending') { // Neu da thanh toan (confirmed) tang ban than.
+             header('Location: /banhaisan/cart/order_success');
+             return;
+        }
+
+        $paymentAmount = $order['payment_method'] === 'cod' ? ($order['total_price'] * 0.5) : $order['total_price'];
+        $orderId = str_pad($order['id'], 6, '0', STR_PAD_LEFT);
+
+        include 'app/views/cart/payment.php';
+    }
+
+    public function check_payment() {
+        header('Content-Type: application/json');
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Invalid ID']);
+            return;
+        }
+        $order = OrderModel::getById($id);
+        if ($order && $order['status'] === 'confirmed') {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+    }
+
+    public function mock_webhook() {
+        // Dung cho demo: gia lap viec webhook tong da nhan dc tien va call vao day
+        header('Content-Type: application/json');
+        $id = intval($_POST['id'] ?? 0);
+        if ($id > 0) {
+            OrderModel::updateStatus($id, 'confirmed');
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
     }
 }
 ?>

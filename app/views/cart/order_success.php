@@ -21,7 +21,7 @@
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
             <span style="font-size:0.88rem;color:var(--text-light);">Thanh toán</span>
-            <span style="font-weight:600;"><?php echo $order['payment'] === 'qr' ? '📱 Chuyển khoản QR' : '💵 COD khi nhận hàng'; ?></span>
+            <span style="font-weight:600;"><?php echo $order['payment'] === 'qr' ? '📱 Đã thanh toán 100% qua QR' : '💵 Thanh toán COD (Đã cọc 50%)'; ?></span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-light);">
             <span style="font-size:0.88rem;color:var(--text-light);">Tổng tiền</span>

@@ -50,32 +50,21 @@
         <div class="checkout-section">
             <h3><span class="step-num">2</span> Phương Thức Thanh Toán</h3>
 
-            <label class="payment-option" id="lblCod" onclick="selectPayment('cod')">
+            <label class="payment-option selected" id="lblCod" onclick="selectPayment('cod')">
                 <input type="radio" name="payment_method" value="cod" id="cod" checked>
                 <label for="cod" style="cursor:pointer;">
-                    💵 Thanh toán khi nhận hàng (COD)
+                    💵 Thanh toán COD lúc nhận (Yêu cầu đặt cọc 50%)
                 </label>
-                <span style="margin-left:auto;font-size:0.8rem;color:var(--text-light);">An toàn & tiện lợi</span>
+                <span style="margin-left:auto;font-size:0.8rem;color:var(--text-light);">Tiền mặt</span>
             </label>
 
             <label class="payment-option" id="lblQr" onclick="selectPayment('qr')">
-                <input type="radio" name="payment_method" value="qr" id="qr" onchange="toggleQr()">
+                <input type="radio" name="payment_method" value="qr" id="qr">
                 <label for="qr" style="cursor:pointer;">
-                    📱 Chuyển khoản / QR Code
+                    📱 Chuyển khoản 100% qua QR
                 </label>
-                <span style="margin-left:auto;font-size:0.8rem;color:var(--success);">Giảm thêm 5%</span>
+                <span style="margin-left:auto;font-size:0.8rem;color:var(--success);">Khuyên dùng</span>
             </label>
-
-            <!-- QR Code Box -->
-            <div id="qrCodeBox" class="qr-box">
-                <h4 style="color:var(--primary);margin-bottom:0.75rem;">Quét mã QR để thanh toán</h4>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=HaiSanTuoi-<?php echo $totalPrice; ?>" 
-                     alt="QR Thanh Toán" width="180" style="margin:0 auto;">
-                <p style="margin-top:0.75rem;font-size:0.88rem;color:var(--text-body);">
-                    Số tiền: <strong style="color:var(--danger);font-size:1.05rem;"><?php echo number_format($totalPrice, 0, ',', '.'); ?>đ</strong>
-                </p>
-                <p style="font-size:0.8rem;color:var(--text-light);">Ghi rõ SĐT trong nội dung chuyển khoản</p>
-            </div>
         </div>
 
         <button type="submit" class="btn btn-accent btn-lg btn-block" style="font-size:1.05rem;" id="submitBtn">
@@ -169,7 +158,6 @@ function selectPayment(method) {
     document.getElementById('qr').checked = (method === 'qr');
     document.getElementById('lblCod').classList.toggle('selected', method === 'cod');
     document.getElementById('lblQr').classList.toggle('selected', method === 'qr');
-    document.getElementById('qrCodeBox').style.display = (method === 'qr') ? 'block' : 'none';
 }
 document.getElementById('lblCod').classList.add('selected');
 
